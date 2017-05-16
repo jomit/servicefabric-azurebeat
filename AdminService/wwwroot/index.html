@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>AzureBeat - Administration</title>
+    <script src="js/libs/jquery-1.11.1.min.js"></script>
+    <script src="js/libs/angular.min.js"></script>
+</head>
+<body>
+    <div id="homePage" data-ng-controller="homeController as home">
+        <h1>Azure Beat Administration</h1>
+        <a href="index.html">Manage Topics</a>  |
+        <a href="managefeeds.html">Manage Feeds</a>  |
+        <a href="viewsubscriptions.html">View Subscriptions</a>
+        <hr />
+        <div style="margin-left:5%">
+            <h3>Manage Topics</h3>
+            <input type="text" placeholder="Enter topic name here.." data-ng-model="home.topicName" />
+            <input type="submit" value="Add Topic" data-ng-click="home.addTopic()" />
+            <ul data-ng-repeat="topic in home.topics">
+                <li>{{ topic.Name }}</li>
+            </ul>
+        </div>
+    </div>
+    <script src="js/core.js"></script>
+    <script src="js/homecontroller.js"></script>
+</body>
+</html>

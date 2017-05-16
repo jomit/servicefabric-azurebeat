@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>AzureBeat - Administration</title>
+    <script src="js/libs/jquery-1.11.1.min.js"></script>
+    <script src="js/libs/angular.min.js"></script>
+</head>
+<body>
+    <div id="homePage" data-ng-controller="homeController as home">
+        <h1>Azure Beat Administration</h1>
+        <a href="index.html">Manage Topics</a>  |
+        <a href="managefeeds.html">Manage Feeds</a>  |
+        <a href="viewsubscriptions.html">View Subscriptions</a>
+        <hr />
+        <div style=" float:left; width:50%">
+            <h3>View Subscriptions</h3>
+            <p></p>
+            <table border="0" style="background-color:lightgray" cellspacing="1" cellpadding="2">
+                <thead style="background-color:white">
+                    <tr>
+                        <td>User Email</td>
+                        <td># of Feeds</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody style="background-color:white" data-ng-repeat="subscription in home.subscriptions">
+                    <tr>
+                        <td>{{ subscription.UserEmail }}</td>
+                        <td>{{ subscription.Feeds.length }}</td>
+                        <td><input type="button" value="View Feeds" data-ng-click="home.setCurrentSubscription(subscription)" /> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="float:left; width:50%" data-ng-show="home.currentSubscription !== null">
+            <h3>Feeds for {{ home.currentSubscription.UserEmail }}</h3>
+            <ul data-ng-repeat="feed in home.currentSubscription.Feeds">
+                <li>
+                    <a href="{{ feed.Url }}">{{ feed.Url | limitTo:50 }}...</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="js/core.js"></script>
+    <script src="js/homecontroller.js"></script>
+</body>
+</html>

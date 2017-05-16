@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="AzureBeatType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Parameters>
+    <Parameter Name="SubscriptionService_MinReplicaSetSize" DefaultValue="2" />
+    <Parameter Name="SubscriptionService_PartitionCount" DefaultValue="4" />
+    <Parameter Name="SubscriptionService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="UserService_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="FeedService_MinReplicaSetSize" DefaultValue="2" />
+    <Parameter Name="FeedService_PartitionCount" DefaultValue="1" />
+    <Parameter Name="FeedService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="AdminService_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="SyncEngine_MinReplicaSetSize" DefaultValue="2" />
+    <Parameter Name="SyncEngine_PartitionCount" DefaultValue="1" />
+    <Parameter Name="SyncEngine_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="FrontendTierConstraint" DefaultValue="" />
+    <Parameter Name="BackendTierConstraint" DefaultValue="" />
+  </Parameters>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="SubscriptionServicePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="UserServicePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="FeedServicePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="AdminServicePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="SyncEnginePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <DefaultServices>
+    <Service Name="SubscriptionService">
+      <StatefulService ServiceTypeName="SubscriptionServiceType" TargetReplicaSetSize="[SubscriptionService_TargetReplicaSetSize]" MinReplicaSetSize="[SubscriptionService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[SubscriptionService_PartitionCount]" LowKey="1" HighKey="4" />
+        <PlacementConstraints>[BackendTierConstraint]</PlacementConstraints>
+      </StatefulService>
+    </Service>
+    <Service Name="UserService">
+      <StatelessService ServiceTypeName="UserServiceType" InstanceCount="[UserService_InstanceCount]">
+        <SingletonPartition />
+        <PlacementConstraints>[FrontendTierConstraint]</PlacementConstraints>
+      </StatelessService>
+    </Service>
+    <Service Name="FeedService">
+      <StatefulService ServiceTypeName="FeedServiceType" TargetReplicaSetSize="[FeedService_TargetReplicaSetSize]" MinReplicaSetSize="[FeedService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[FeedService_PartitionCount]" LowKey="1" HighKey="4" />
+        <PlacementConstraints>[BackendTierConstraint]</PlacementConstraints>
+      </StatefulService>
+    </Service>
+    <Service Name="AdminService">
+      <StatelessService ServiceTypeName="AdminServiceType" InstanceCount="[AdminService_InstanceCount]">
+        <SingletonPartition />
+        <PlacementConstraints>[FrontendTierConstraint]</PlacementConstraints>
+      </StatelessService>
+    </Service>
+    <Service Name="SyncEngine">
+      <StatefulService ServiceTypeName="SyncEngineType" TargetReplicaSetSize="[SyncEngine_TargetReplicaSetSize]" MinReplicaSetSize="[SyncEngine_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[SyncEngine_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+        <PlacementConstraints>[BackendTierConstraint]</PlacementConstraints>
+      </StatefulService>
+    </Service>
+  </DefaultServices>
+</ApplicationManifest>

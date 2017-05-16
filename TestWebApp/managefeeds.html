@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>AzureBeat - Administration</title>
+    <script src="js/libs/jquery-1.11.1.min.js"></script>
+    <script src="js/libs/angular.min.js"></script>
+</head>
+<body>
+    <div id="homePage" data-ng-controller="homeController as home">
+        <h1>Azure Beat Administration</h1>
+        <a href="index.html">Manage Topics</a>  |
+        <a href="managefeeds.html">Manage Feeds</a>  |
+        <a href="viewsubscriptions.html">View Subscriptions</a>
+        <hr />
+        <div style="float:left; width:50%">
+            <h3>Manage Feeds</h3>
+            <input type="text" placeholder="Enter feed url here.." style="width:40%" data-ng-model="home.newFeed.url" />
+            <input type="submit" value="Add Feed" data-ng-click="home.addFeed()" />
+            <p></p>
+            <table border="0" style="background-color:lightgray" cellspacing="1" cellpadding="2">
+                <thead style="background-color:white">
+                    <tr>
+                        <td>Title</td>
+                        <td>Url</td>
+                        <td># of Posts</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody style="background-color:white" data-ng-repeat="feed in home.feeds">
+                    <tr>
+                        <td>{{ feed.Title }}</td>
+                        <td><a href="{{ feed.Url }}">{{ feed.Url | limitTo:50 }}...</a></td>
+                        <td>{{ feed.Posts.length }}</td>
+                        <td><input type="button" value="View Posts" data-ng-click="home.setCurrentFeed(feed)" /> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="float:left; width:50%" data-ng-show="home.currentFeed !== null">
+            <h3>Posts for {{ home.currentFeed.Title }}</h3>
+            <ul data-ng-repeat="post in home.currentFeed.Posts">
+                <li>
+                    <strong>{{ post.Title }}</strong>
+                    <p>{{ post.Summary }}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="js/core.js"></script>
+    <script src="js/homecontroller.js"></script>
+</body>
+</html>
